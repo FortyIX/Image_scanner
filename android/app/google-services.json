@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "538673204987",
+    "firebase_url": "https://imagescanner-f14ea.firebaseio.com",
+    "project_id": "imagescanner-f14ea",
+    "storage_bucket": "imagescanner-f14ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538673204987:android:7108c0d7bf4873dd",
+        "android_client_info": {
+          "package_name": "io.fuzhang.imagescanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538673204987-v6adbuebdgcfvh4lr9h0qb37r4hkd58o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOJ4ftfLb8sXxw3IfskVt0h_EmDHrLqNc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
