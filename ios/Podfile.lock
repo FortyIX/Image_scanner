@@ -124,9 +124,6 @@ PODS:
   - Protobuf (3.6.1)
 
 DEPENDENCIES:
-  - Firebase/Core
-  - Firebase/MLVision
-  - Firebase/MLVisionTextModel
   - firebase_ml_vision (from `.symlinks/plugins/firebase_ml_vision/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -183,6 +180,6 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
 
-PODFILE CHECKSUM: 434b1a4000eab00faa58ee1d27e5950dd4da9994
+PODFILE CHECKSUM: 337d605e8f6ef47cd660f141317b8f4bd2d55dea
 
 COCOAPODS: 1.5.3

@@ -23,6 +23,7 @@ class Test extends StatefulWidget{
 class _TestState extends State<Test>{
 
   var pic = null;
+  String info = '';
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class _TestState extends State<Test>{
 
                   new ListTile(
                     leading: this.pic,
-                    title: Text("Fuck you google"),
+                    title: Text(this.info),
                   )
                 ],
               )
@@ -87,30 +88,43 @@ class _TestState extends State<Test>{
   
   void detectText(File image) async{
     final targetImage = image;
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(targetImage);
+    final FirebaseVisionImage FVimage = FirebaseVisionImage.fromFile(image);
 
     // create the detecting instance from firebase
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
 
     
-    final VisionText visionText = await textRecognizer.detectInImage(visionImage);
+    final VisionText visionText = await textRecognizer.detectInImage(FVimage);
 
+    int i=0;
     String text = visionText.text;
     for (TextBlock block in visionText.blocks) {
+      i++;
       final Rectangle<int> boundingBox = block.boundingBox;
       final List<Point<int>> cornerPoints = block.cornerPoints;
       final String text = block.text;
       final List<RecognizedLanguage> languages = block.recognizedLanguages;
 
-      }
+      for (TextLine line in block.lines) {
+        print(line.text + " "+"with counter:" + " " + i.toString());
 
-      print("Hello World");
-      print(text);
+
+        for (TextElement element in line.elements) {
+          // Same getters as TextBlock
+        }
+      }
+    }
+
+      setState(() {
+        this.info = text;
+      });
+
+
     
   } 
   
   
-  
+
 }
 
 
