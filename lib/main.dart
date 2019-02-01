@@ -37,9 +37,9 @@ class _TestState extends State<Test>{
         accentColor: Colors.white,
       ),
       
-      title: "Gallery Test",
+      title: "OCR",
       home:Scaffold(
-        appBar: new AppBar(title: Text("Gallery picker"),),
+        appBar: new AppBar(title: Text("Optical Character Recognition"),),
       body: new ListView(
         children: <Widget>[
           Column(
@@ -79,7 +79,7 @@ class _TestState extends State<Test>{
     var pic1= await ImagePicker.pickImage(source: ImageSource.camera);
 //    var picData  = await pic1.readAsBytes();
 
-  detectText(pic1);
+    detectText(pic1);
 
 
 
