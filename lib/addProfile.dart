@@ -22,6 +22,8 @@ class _AddProfilePage extends State<AddProfilePage>{
 
   var pic = null;
   String info = '';
+
+
   TextEditingController nameController = new TextEditingController();
   TextEditingController courseController = new TextEditingController();
 
@@ -33,7 +35,7 @@ class _AddProfilePage extends State<AddProfilePage>{
     // TODO: implement build
     return MaterialApp(
         theme: ThemeData(
-          primaryColor: Colors.lightBlue,
+          primaryColor: Colors.blueAccent,
           accentColor: Colors.white,
         ),
 
@@ -45,19 +47,20 @@ class _AddProfilePage extends State<AddProfilePage>{
                 Column(
                   children: <Widget>[
 
+                    new SizedBox(height: 10),
                     new TextField(
 
                       decoration: InputDecoration(
-                          border: InputBorder.none,
+
                           hintText: "name"
                       ),
                       controller: nameController,
                     ),
 
-
+                    new SizedBox(height: 10),
                     new TextField(
                       decoration: InputDecoration(
-                          border: InputBorder.none,
+
                           hintText: "course"
                       ),
                       controller: courseController,
@@ -74,7 +77,7 @@ class _AddProfilePage extends State<AddProfilePage>{
                               color: Theme.of(context).accentColor,
                               elevation: 4.0,
                               splashColor: Colors.blueGrey,
-                              onPressed: () => openCamera(),
+                              onPressed: () => _openCamera(),
                             )
 
 
@@ -83,10 +86,10 @@ class _AddProfilePage extends State<AddProfilePage>{
                         new Container(
                           child:RaisedButton(
                             child: Text("Save Profile"),
-                            color: Theme.of(context).accentColor,
+                            color: Colors.redAccent,
                             elevation: 4.0,
                             splashColor: Colors.blueGrey,
-                            onPressed: () => openCamera(),
+                            onPressed: () => _openCamera(),
                           ),
                         )
 
@@ -113,19 +116,19 @@ class _AddProfilePage extends State<AddProfilePage>{
   }
 
 
-  void openCamera() async {
+  void _openCamera() async {
 
     var pic1= await ImagePicker.pickImage(source: ImageSource.camera);
 //    var picData  = await pic1.readAsBytes();
 
-    detectText(pic1);
+    _detectText(pic1);
 
 
 
   }
 
 
-  void detectText(File image) async{
+  void _detectText(File image) async{
     final targetImage = image;
     final FirebaseVisionImage FVimage = FirebaseVisionImage.fromFile(image);
 
@@ -135,17 +138,20 @@ class _AddProfilePage extends State<AddProfilePage>{
 
     final VisionText visionText = await textRecognizer.detectInImage(FVimage);
 
-    int i=0;
+    int i =0;
+    int j = 0;
+
     String text = visionText.text;
     for (TextBlock block in visionText.blocks) {
-      i++;
+      i = i+ 1;
       final Rectangle<int> boundingBox = block.boundingBox;
       final List<Point<int>> cornerPoints = block.cornerPoints;
       final String text = block.text;
       final List<RecognizedLanguage> languages = block.recognizedLanguages;
 
       for (TextLine line in block.lines) {
-        print(line.text + " "+"with counter:" + " " + i.toString());
+        j= j+ 1;
+        print(line.text + " "+"with black:" + " " + i.toString() + " "+"with Line"+ " "+j.toString());
 
 
         for (TextElement element in line.elements) {
@@ -157,6 +163,14 @@ class _AddProfilePage extends State<AddProfilePage>{
     setState(() {
       this.info = text;
     });
+
+  }
+
+
+  void _setEditForm(List<TextLine> recognizedDataLine){
+
+    nameController.text = recognizedDataLine[2].toString() + recognizedDataLine[3].toString();
+    courseController.text = recognizedDataLine[5].toString();
 
 
 
