@@ -1,26 +1,35 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:math';
-
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+
+import 'package:image_scanner/setting.dart';
+
 
 class AddProfilePage extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+
     return new _AddProfilePage();
   }
 }
 
 
-class _AddProfilePage extends State<AddProfilePage>{
+class _AddProfilePage extends State<AddProfilePage> {
 
 
-  var pic = null;
+  String course_name = '';
+  String profile_name = '';
+
+
+  DatabaseReference database_ref = FirebaseDatabase.instance.reference();
+
   String info = '';
 
 
@@ -30,9 +39,6 @@ class _AddProfilePage extends State<AddProfilePage>{
   @override
   Widget build(BuildContext context) {
 
-
-
-    // TODO: implement build
     return MaterialApp(
         theme: ThemeData(
           primaryColor: Colors.blueAccent,
@@ -40,7 +46,7 @@ class _AddProfilePage extends State<AddProfilePage>{
         ),
 
         title: "OCR",
-        home:Scaffold(
+        home: Scaffold(
             appBar: new AppBar(title: Text("Optical Character Recognition"),),
             body: new ListView(
               children: <Widget>[
@@ -71,10 +77,12 @@ class _AddProfilePage extends State<AddProfilePage>{
 
                       children: <Widget>[
                         new Container(
-                            padding:EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: RaisedButton(
                               child: Text("Open Camera"),
-                              color: Theme.of(context).accentColor,
+                              color: Theme
+                                  .of(context)
+                                  .accentColor,
                               elevation: 4.0,
                               splashColor: Colors.blueGrey,
                               onPressed: () => _openCamera(),
@@ -84,12 +92,12 @@ class _AddProfilePage extends State<AddProfilePage>{
                         ),
 
                         new Container(
-                          child:RaisedButton(
+                          child: RaisedButton(
                             child: Text("Save Profile"),
                             color: Colors.redAccent,
                             elevation: 4.0,
                             splashColor: Colors.blueGrey,
-                            onPressed: () => _openCamera(),
+                            onPressed: () => _submitData()
                           ),
                         )
 
@@ -101,7 +109,7 @@ class _AddProfilePage extends State<AddProfilePage>{
                       children: <Widget>[
 
                         new ListTile(
-                          leading: this.pic,
+
                           title: Text(this.info),
                         )
                       ],
@@ -116,30 +124,45 @@ class _AddProfilePage extends State<AddProfilePage>{
   }
 
 
-  void _openCamera() async {
+  // configure the output of the information
+  void _setEditForm(List<TextLine> recognizedDataLine) {
+    if(recognizedDataLine.length < 2){
+      Util.triggerSimpleDialog(context, "Poor Capture ", "The image you captured does not contain enough information, please retry", "Close");
+    }
+    else{
+      nameController.text =
+          recognizedDataLine[0].text + "  " + recognizedDataLine[1].text;
+      courseController.text = recognizedDataLine[3].text;
 
-    var pic1= await ImagePicker.pickImage(source: ImageSource.camera);
-//    var picData  = await pic1.readAsBytes();
-
-    _detectText(pic1);
-
-
-
+    }
   }
 
 
-  void _detectText(File image) async{
+  // open camera intent and return a picture followed by calling function to analysing the image
+  void _openCamera() async {
+    var pic1 = await ImagePicker.pickImage(source: ImageSource.camera);
+   //    var picData  = await pic1.readAsBytes();
+
+     _detectText(pic1);
+  }
+
+
+
+// Detect the texts in the image and call function to dispaly the information for recording/debugging
+  void _detectText(File image) async {
+
     final targetImage = image;
     final FirebaseVisionImage FVimage = FirebaseVisionImage.fromFile(image);
 
     // create the detecting instance from firebase
-    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
+    final TextRecognizer textRecognizer = FirebaseVision.instance
+        .textRecognizer();
 
 
     final VisionText visionText = await textRecognizer.detectInImage(FVimage);
 
-    int i =0;
-    int j = 0;
+     int i =0;
+     int j = 0;
 
     String text = visionText.text;
     for (TextBlock block in visionText.blocks) {
@@ -148,6 +171,8 @@ class _AddProfilePage extends State<AddProfilePage>{
       final List<Point<int>> cornerPoints = block.cornerPoints;
       final String text = block.text;
       final List<RecognizedLanguage> languages = block.recognizedLanguages;
+
+
 
       for (TextLine line in block.lines) {
         j= j+ 1;
@@ -160,24 +185,61 @@ class _AddProfilePage extends State<AddProfilePage>{
       }
     }
 
-    setState(() {
-      this.info = text;
-    });
+      setState(() {
+        this.info = text;
+        if(visionText.blocks.length<1){
+          Util.triggerSimpleDialog(context, "Poor Capture ", "The image you captured does not contain enough information, please retry", "Close");
+        }
+        else {
+          _setEditForm(visionText.blocks[1].lines);
+        }
+      });
+    }
+
+
+    // upload the data in the inputfield to the database
+    void _submitData(){
+
+       this.course_name = this.courseController.text;
+       this.profile_name = this.nameController.text;
+
+       _uploadProfile();
+
+
+    }
+
+
+
+
+
+
+
+    void _uploadProfile(){
+
+      var tobeUploadeddata = {
+        "name":profile_name,
+        "course":course_name
+      };
+
+      if(_vaildateInput()) {
+        database_ref.child('kcl_robotics_attendance').push().set(
+            tobeUploadeddata);
+      }
+      else{
+        Util.triggerSimpleDialog(context, "Invaild Input", "Please fill in both input field properly", "Close");
+      }
+
+    }
+
+
+
+    bool _vaildateInput(){
+
+       return  (profile_name != ' ' && course_name != ' ' );
+
+    }
+
 
   }
-
-
-  void _setEditForm(List<TextLine> recognizedDataLine){
-
-    nameController.text = recognizedDataLine[2].toString() + recognizedDataLine[3].toString();
-    courseController.text = recognizedDataLine[5].toString();
-
-
-
-  }
-
-
-
-}
 
 
