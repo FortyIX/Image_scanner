@@ -184,7 +184,7 @@ class _AddProfilePage extends State<AddProfilePage> {
         .textRecognizer();
 
 
-    final VisionText visionText = await textRecognizer.detectInImage(FVimage);
+    final VisionText visionText = await textRecognizer.processImage(FVimage);
 
      int i =0;
      int j = 0;
