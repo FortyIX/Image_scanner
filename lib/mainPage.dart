@@ -1,10 +1,16 @@
+import 'dart:async';
+import 'dart:io';
+
+
 import 'package:flutter/material.dart';
-import 'package:image_scanner/addProfile.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+
 import 'package:image_scanner/ProfileInstance.dart';
 import 'package:image_scanner/editProfile.dart';
 import "package:image_scanner/settingPage.dart";
+import 'package:image_scanner/addProfile.dart';
 
 
 class MainPageWidget extends StatefulWidget {
@@ -21,13 +27,21 @@ class MainPageWidget extends StatefulWidget {
 class _MainPageWidget extends State<MainPageWidget>{
 
   List<ProfileInstance> data = [];
+  var dataStream;
 
    @override
   void initState() {
     // TODO: implement initState
 
+     StreamSubscription<Event> _addProfileSubscription;
+     StreamSubscription<Event> _EditProfileSubscription;
+     StreamSubscription<Event> _removeProfileSubscription;
+
      DatabaseReference database_ref = FirebaseDatabase.instance.reference();
+     DatabaseReference entry_ref = FirebaseDatabase.instance.reference().child("kcl_robotics_attendance_with_time");
+
      database_ref.child("kcl_robotics_attendance_with_time").once().then((DataSnapshot snap){
+       dataStream = snap;
        var keys = snap.value.keys;
        var data_instance = snap.value;
 
@@ -46,16 +60,30 @@ class _MainPageWidget extends State<MainPageWidget>{
 
        }
 
-       print("Length"+this.data.length.toString());
-       print("running here1 ");
+// DEBUG
+//       print("Length"+this.data.length.toString());
+//       print("running here1 ");
 
      });
 
 
 
+     // Listen to the database and update upon changes
+     _EditProfileSubscription = entry_ref.onValue.listen((Event){
+
+       _updateInfo();
+     });
+
+     _addProfileSubscription = entry_ref.onChildAdded.listen((Event){
+       _updateInfo();
+     });
+
+     _removeProfileSubscription = entry_ref.onChildRemoved.listen((Event){
+       _updateInfo();
+     });
+
+
      super.initState();
-     WidgetsBinding.instance
-         .addPostFrameCallback((_) => _updateInfo());
 
   }
 
@@ -68,12 +96,12 @@ class _MainPageWidget extends State<MainPageWidget>{
        print("Hello there, it's running ");
        return new MaterialApp(
            theme: ThemeData(
-               primaryColor: Color.fromARGB(255, 21, 140, 134),
+               primaryColor: Colors.white,
                accentColor: Colors.white,
                 ),
            title: "home_page",
            home: new Scaffold(
-             backgroundColor: Color.fromARGB(255, 176, 244, 241),
+             backgroundColor: Colors.lightBlueAccent,
              drawer: _createDrawer(),
              appBar: new AppBar(
                title: new Text("Home Page"),
@@ -124,13 +152,13 @@ class _MainPageWidget extends State<MainPageWidget>{
 
 
 
-
+// creating a new card that contains information
     Widget createCard(String name, String course,String day, String month,int index){
 
          return new GestureDetector(
            child: Card(
-             elevation: 5.0,
-             margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 10.0),
+             elevation: 3.0,
+             margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
              child: new Container(
                decoration: BoxDecoration(),
                child: _makeList(name,course,day,month),

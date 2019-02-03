@@ -50,12 +50,13 @@ class _EditProfilePage extends State<EditProfilePage>{
     // TODO: implement build
     return MaterialApp(
         theme: ThemeData(
-          primaryColor: Color.fromARGB(255, 21, 140, 134),
+          primaryColor: Colors.lightBlueAccent,
           accentColor: Colors.white,
         ),
 
         title: 'OCR',
         home: Scaffold(
+            backgroundColor: Colors.lightBlueAccent,
             appBar: new AppBar(title: Text("Edit Profile"),),
             body: new ListView(
 
@@ -171,8 +172,9 @@ class _EditProfilePage extends State<EditProfilePage>{
   }
 
 
-
-
+  /**
+   * Function for assign the value to the class properties
+   */
   void _onSubmit(BuildContext context){
 
     this.new_name = nameController.text;
@@ -185,9 +187,14 @@ class _EditProfilePage extends State<EditProfilePage>{
   }
 
 
+
   void _onDelete(BuildContext context){
     _delData(context);
   }
+
+
+
+
 
   void _updateData(BuildContext context){
 
@@ -197,23 +204,18 @@ class _EditProfilePage extends State<EditProfilePage>{
         'day': this.new_day,
         'month': this.new_month
     }).then((_){
-      Scaffold.of(context).showSnackBar(updateSnackBar);
+      Navigator.pop(context);
     });
-
   }
+
 
 
 
    void _delData(BuildContext context){
      database_ref.child("kcl_robotics_attendance_with_time"+"/"+widget.store.key).remove().then((_){
-
-       Scaffold.of(context).showSnackBar(delSnackBar);
+       Navigator.pop(context);
      });
-
    }
-
-
-
 
   }
 

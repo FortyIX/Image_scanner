@@ -24,6 +24,7 @@ class AddProfilePage extends StatefulWidget{
 class _AddProfilePage extends State<AddProfilePage> {
 
 
+
   String course_name = '';
   String profile_name = '';
   String day = '';
@@ -43,21 +44,23 @@ class _AddProfilePage extends State<AddProfilePage> {
   Widget build(BuildContext context) {
 
 
+
     return MaterialApp(
         theme: ThemeData(
-          primaryColor: Color.fromARGB(255, 21, 140, 134),
+          primaryColor: Colors.white,
           accentColor: Colors.white,
         ),
 
         title: 'OCR',
         home: Scaffold(
+            backgroundColor: Colors.lightBlueAccent,
             appBar: new AppBar(title: Text("Add New Profile"),),
             body: new ListView(
 
-                children: <Widget>[
+               children: <Widget>[
 
                 new Card(
-                    elevation: 8.0,
+                    elevation: 30.0,
                     margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 9.0),
                     child: new Container(
                         decoration: BoxDecoration(),
@@ -238,9 +241,6 @@ class _AddProfilePage extends State<AddProfilePage> {
 
 
 
-
-
-
     void _uploadProfile(){
 
       var tobeUploadeddata = {
@@ -267,6 +267,7 @@ class _AddProfilePage extends State<AddProfilePage> {
        return  (profile_name != ' ' && course_name != ' ' );
 
     }
+
 
 
   }
