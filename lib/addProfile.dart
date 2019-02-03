@@ -26,6 +26,9 @@ class _AddProfilePage extends State<AddProfilePage> {
 
   String course_name = '';
   String profile_name = '';
+  String day = '';
+  String month = '';
+  //String weekDay = '';
 
 
   DatabaseReference database_ref = FirebaseDatabase.instance.reference();
@@ -48,7 +51,7 @@ class _AddProfilePage extends State<AddProfilePage> {
 
         title: 'OCR',
         home: Scaffold(
-            appBar: new AppBar(title: Text("Optical Character Recognition"),),
+            appBar: new AppBar(title: Text("Add New Profile"),),
             body: new ListView(
                 children: <Widget>[
 
@@ -218,8 +221,11 @@ class _AddProfilePage extends State<AddProfilePage> {
     // upload the data in the inputfield to the database
     void _submitData(){
 
+       this.day = DateTime.now().day.toString();
+       this.month = DateTime.now().month.toString();
        this.course_name = this.courseController.text;
        this.profile_name = this.nameController.text;
+
 
        _uploadProfile();
 
@@ -231,16 +237,17 @@ class _AddProfilePage extends State<AddProfilePage> {
 
 
 
-
     void _uploadProfile(){
 
       var tobeUploadeddata = {
         "name":profile_name,
-        "course":course_name
+        "course":course_name,
+        "day":day,
+        "month":month,
       };
 
       if(_vaildateInput()) {
-        database_ref.child('kcl_robotics_attendance').push().set(
+        database_ref.child('kcl_robotics_attendance_with_time').push().set(
             tobeUploadeddata);
       }
       else{
