@@ -45,7 +45,7 @@ class _AddProfilePage extends State<AddProfilePage> {
 
     return MaterialApp(
         theme: ThemeData(
-          primaryColor: Colors.blueAccent,
+          primaryColor: Color.fromARGB(255, 21, 140, 134),
           accentColor: Colors.white,
         ),
 
@@ -53,6 +53,7 @@ class _AddProfilePage extends State<AddProfilePage> {
         home: Scaffold(
             appBar: new AppBar(title: Text("Add New Profile"),),
             body: new ListView(
+
                 children: <Widget>[
 
                 new Card(

@@ -3,6 +3,7 @@ import 'package:image_scanner/addProfile.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_scanner/ProfileInstance.dart';
+import 'package:image_scanner/editProfile.dart';
 
 
 class MainPageWidget extends StatefulWidget {
@@ -80,7 +81,7 @@ class _MainPageWidget extends State<MainPageWidget>{
                child: this.data.length == 0 ? new Text("Downloading") :
                new ListView.builder(itemBuilder: (_,index){
 
-                 return createCard(this.data[index].name, this.data[index].course,this.data[index].day,this.data[index].month);
+                 return createCard(this.data[index].name, this.data[index].course,this.data[index].day,this.data[index].month,index);
 
 
                }, itemCount: this.data.length),
@@ -120,16 +121,24 @@ class _MainPageWidget extends State<MainPageWidget>{
 
 
 
-    Widget createCard(String name, String course,String day, String month){
+    Widget createCard(String name, String course,String day, String month,int index){
 
-         return new Card(
-           elevation: 5.0,
-           margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 10.0),
-           child: new Container(
-             decoration: BoxDecoration(),
-             child: _makeList(name,course,day,month),
+         return new GestureDetector(
+           child: Card(
+             elevation: 5.0,
+             margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 10.0),
+             child: new Container(
+               decoration: BoxDecoration(),
+               child: _makeList(name,course,day,month),
              ),
-           );
+
+           ),
+           onTap: (){
+             Navigator.push(context,
+             MaterialPageRoute(builder: (BuildContext context) => EditProfilePage(store: this.data[index])));
+           },
+         );
+
          
 
     }
@@ -142,9 +151,9 @@ class _MainPageWidget extends State<MainPageWidget>{
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text("Menu"),
+              child: Image.asset('images/Labelled_logo.png'),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 21, 140, 134),
+                color: Colors.white
               ),
             ),
 
