@@ -25,9 +25,16 @@ class _EditProfilePage extends State<EditProfilePage>{
 
   TextEditingController nameController = new TextEditingController();
   TextEditingController courseController = new TextEditingController();
+  TextEditingController dayController = new TextEditingController();
+  TextEditingController monthController = new TextEditingController();
+
+  String new_name  = "";
+  String new_course  = "";
+  String new_day  = "";
+  String new_month  = "";
 
 
-
+   DatabaseReference database_ref = FirebaseDatabase.instance.reference();
 
 
 
@@ -93,7 +100,7 @@ class _EditProfilePage extends State<EditProfilePage>{
                                       border: new OutlineInputBorder(),
                                       hintText: widget.store.day
                                   ),
-                                  controller: courseController,
+                                  controller: dayController,
                                 ),
                               ),
 
@@ -108,7 +115,7 @@ class _EditProfilePage extends State<EditProfilePage>{
                                       border: new OutlineInputBorder(),
                                       hintText: widget.store.month
                                   ),
-                                  controller: courseController,
+                                  controller: monthController,
                                 ),
                               ),
 
@@ -120,11 +127,11 @@ class _EditProfilePage extends State<EditProfilePage>{
                                   new Container(
                                       padding: EdgeInsets.all(8.0),
                                       child: RaisedButton(
-                                        child: Text("Open Camera"),
+                                        child: Text("Update"),
                                         color: Theme.of(context).accentColor,
                                         elevation: 4.0,
                                         splashColor: Colors.blueGrey,
-                                        onPressed: () => null,
+                                        onPressed: () => _onSubmit(),
                                       )
 
 
@@ -132,11 +139,11 @@ class _EditProfilePage extends State<EditProfilePage>{
 
                                   new Container(
                                     child: RaisedButton(
-                                        child: Text("Save Profile"),
+                                        child: Text("Delete Profile"),
                                         color: Colors.redAccent,
                                         elevation: 4.0,
                                         splashColor: Colors.blueGrey,
-                                        onPressed: () => null
+                                        onPressed: () => _onDelete()
                                     ),
                                   )
 
@@ -152,6 +159,49 @@ class _EditProfilePage extends State<EditProfilePage>{
             )
         )
     );
+
+
+  }
+
+
+
+
+  void _onSubmit(){
+
+    this.new_name = nameController.text;
+    this.new_course = courseController.text;
+    this.new_day = dayController.text;
+    this.new_month = monthController.text;
+
+    _updateData();
+
+  }
+
+
+  void _onDelete(){
+    _delData();
+  }
+
+  void _updateData(){
+
+    database_ref.child("kcl_robotics_attendance_with_time"+"/"+widget.store.key).set({
+        'name': this.new_name,
+        'course': this.new_course,
+        'day': this.new_day,
+        'month': this.new_month
+    });
+
+  }
+
+
+
+   void _delData(){
+     database_ref.child("kcl_robotics_attendance_with_time"+"/"+widget.store.key).remove();
+   }
+
+
+
+
   }
 
 
@@ -165,7 +215,3 @@ class _EditProfilePage extends State<EditProfilePage>{
 
 
 
-
-
-
-}
