@@ -19,3 +19,10 @@ class Util {
     );
   }
 }
+
+
+class GeneralSetting{
+
+  static bool debug_mode = false;
+
+}

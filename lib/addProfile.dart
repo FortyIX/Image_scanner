@@ -208,7 +208,10 @@ class _AddProfilePage extends State<AddProfilePage> {
     }
 
       setState(() {
-        this.info = text;
+        if(GeneralSetting.debug_mode) {
+          this.info = text;
+        }
+
         if(visionText.blocks.length<1){
           Util.triggerSimpleDialog(context, "Poor Capture ", "The image you captured does not contain enough information, please retry", "Close");
         }

@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_scanner/ProfileInstance.dart';
 import 'package:image_scanner/editProfile.dart';
+import "package:image_scanner/settingPage.dart";
 
 
 class MainPageWidget extends StatefulWidget {
@@ -53,6 +54,8 @@ class _MainPageWidget extends State<MainPageWidget>{
 
 
      super.initState();
+     WidgetsBinding.instance
+         .addPostFrameCallback((_) => _updateInfo());
 
   }
 
@@ -176,7 +179,7 @@ class _MainPageWidget extends State<MainPageWidget>{
             ListTile(
               title: Text("Setting"),
               onTap: (){
-                //do nothing for now
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingPage()));
 
 
               },

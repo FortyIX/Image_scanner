@@ -34,8 +34,15 @@ class _EditProfilePage extends State<EditProfilePage>{
   String new_month  = "";
 
 
-   DatabaseReference database_ref = FirebaseDatabase.instance.reference();
+  DatabaseReference database_ref = FirebaseDatabase.instance.reference();
 
+  final updateSnackBar = SnackBar(
+    content: Text("Updated Sucessfully"),
+  );
+
+  final delSnackBar = SnackBar(
+    content: Text("Updated Sucessfully"),
+  );
 
 
   @override
@@ -49,7 +56,7 @@ class _EditProfilePage extends State<EditProfilePage>{
 
         title: 'OCR',
         home: Scaffold(
-            appBar: new AppBar(title: Text("Add New Profile"),),
+            appBar: new AppBar(title: Text("Edit Profile"),),
             body: new ListView(
 
                 children: <Widget>[
@@ -131,7 +138,7 @@ class _EditProfilePage extends State<EditProfilePage>{
                                         color: Theme.of(context).accentColor,
                                         elevation: 4.0,
                                         splashColor: Colors.blueGrey,
-                                        onPressed: () => _onSubmit(),
+                                        onPressed: () => _onSubmit(context),
                                       )
 
 
@@ -143,7 +150,7 @@ class _EditProfilePage extends State<EditProfilePage>{
                                         color: Colors.redAccent,
                                         elevation: 4.0,
                                         splashColor: Colors.blueGrey,
-                                        onPressed: () => _onDelete()
+                                        onPressed: () => _onDelete(context)
                                     ),
                                   )
 
@@ -166,37 +173,43 @@ class _EditProfilePage extends State<EditProfilePage>{
 
 
 
-  void _onSubmit(){
+  void _onSubmit(BuildContext context){
 
     this.new_name = nameController.text;
     this.new_course = courseController.text;
     this.new_day = dayController.text;
     this.new_month = monthController.text;
 
-    _updateData();
+    _updateData(context);
 
   }
 
 
-  void _onDelete(){
-    _delData();
+  void _onDelete(BuildContext context){
+    _delData(context);
   }
 
-  void _updateData(){
+  void _updateData(BuildContext context){
 
     database_ref.child("kcl_robotics_attendance_with_time"+"/"+widget.store.key).set({
         'name': this.new_name,
         'course': this.new_course,
         'day': this.new_day,
         'month': this.new_month
+    }).then((_){
+      Scaffold.of(context).showSnackBar(updateSnackBar);
     });
 
   }
 
 
 
-   void _delData(){
-     database_ref.child("kcl_robotics_attendance_with_time"+"/"+widget.store.key).remove();
+   void _delData(BuildContext context){
+     database_ref.child("kcl_robotics_attendance_with_time"+"/"+widget.store.key).remove().then((_){
+
+       Scaffold.of(context).showSnackBar(delSnackBar);
+     });
+
    }
 
 
