@@ -7,5 +7,10 @@ import 'package:image_scanner/mainPage.dart';
 
 
 
-void main() => runApp(MainPageWidget());
+void main(){
+  runApp(MaterialApp(
+    title: 'image_scanner',
+    home: MainPageWidget(),
+  ));
+}
 

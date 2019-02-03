@@ -39,87 +39,105 @@ class _AddProfilePage extends State<AddProfilePage> {
   @override
   Widget build(BuildContext context) {
 
+
     return MaterialApp(
         theme: ThemeData(
           primaryColor: Colors.blueAccent,
           accentColor: Colors.white,
         ),
 
-        title: "OCR",
+        title: 'OCR',
         home: Scaffold(
             appBar: new AppBar(title: Text("Optical Character Recognition"),),
             body: new ListView(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
+                children: <Widget>[
 
-                    new SizedBox(height: 10),
-                    new TextField(
+                new Card(
+                    elevation: 8.0,
+                    margin: new EdgeInsets.symmetric(horizontal: 10.0,vertical: 9.0),
+                    child: new Container(
+                        decoration: BoxDecoration(),
+                        child: Column(
+                          children: <Widget>[
 
-                      decoration: InputDecoration(
+                               new SizedBox(height: 10),
+                               new Container(
+                                 padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                 child: new TextField(
+                                   decoration: InputDecoration(
+                                       border: new OutlineInputBorder(),
+                                       hintText: "name"
+                                   ),
+                                   controller: nameController,
+                                 ),
+                               ),
 
-                          hintText: "name"
-                      ),
-                      controller: nameController,
-                    ),
+                               new SizedBox(height: 10),
 
-                    new SizedBox(height: 10),
-                    new TextField(
-                      decoration: InputDecoration(
+                               new Container(
+                                 padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                 child:  new TextField(
 
-                          hintText: "course"
-                      ),
-                      controller: courseController,
-                    ),
+                                   decoration: InputDecoration(
 
-                    new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-
-                      children: <Widget>[
-                        new Container(
-                            padding: EdgeInsets.all(8.0),
-                            child: RaisedButton(
-                              child: Text("Open Camera"),
-                              color: Theme
-                                  .of(context)
-                                  .accentColor,
-                              elevation: 4.0,
-                              splashColor: Colors.blueGrey,
-                              onPressed: () => _openCamera(),
-                            )
+                                       border: new OutlineInputBorder(),
+                                       hintText: "course"
+                                   ),
+                                   controller: courseController,
+                                 ),
+                               ),
 
 
-                        ),
 
-                        new Container(
-                          child: RaisedButton(
-                            child: Text("Save Profile"),
-                            color: Colors.redAccent,
-                            elevation: 4.0,
-                            splashColor: Colors.blueGrey,
-                            onPressed: () => _submitData()
-                          ),
-                        )
+                                new Row(
+                                     mainAxisAlignment: MainAxisAlignment.center,
+                                     children: <Widget>[
+                                         new Container(
+                                            padding: EdgeInsets.all(8.0),
+                                              child: RaisedButton(
+                                                 child: Text("Open Camera"),
+                                                 color: Theme.of(context).accentColor,
+                                                 elevation: 4.0,
+                                                 splashColor: Colors.blueGrey,
+                                                  onPressed: () => _openCamera(),
+                                               )
 
-                      ],
-                    ),
-                    new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
 
-                        new ListTile(
+                                            ),
 
-                          title: Text(this.info),
-                        )
-                      ],
-                    )
+                                         new Container(
+                                              child: RaisedButton(
+                                                  child: Text("Save Profile"),
+                                                  color: Colors.redAccent,
+                                                  elevation: 4.0,
+                                                  splashColor: Colors.blueGrey,
+                                                  onPressed: () => _submitData()
+                                              ),
+                                           )
+
+                                    ],
+                                 ),
+                               new Column(
+                                   mainAxisAlignment: MainAxisAlignment.start,
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: <Widget>[
+
+                                       new ListTile(
+
+                                          title: Text(this.info),
+                                         )
+
+                                   ],
+                                )
 
                   ],
                 )
-              ],
+
             )
         )
+      ]
+     )
+     )
     );
   }
 
