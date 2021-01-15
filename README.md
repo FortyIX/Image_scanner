@@ -1,8 +1,5 @@
-# image_scanner
+# KCL-Robotics-Attendance-Recorder 
 
-An APP that scan a image to recognize printed texts in the image
+An APP that scan a student to recognize printed texts on the card
 
-## Getting Started
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
